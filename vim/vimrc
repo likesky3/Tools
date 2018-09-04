@@ -1,0 +1,270 @@
+
+" avoid exit 1
+filetype on
+
+""""""""""""""""""""""""""""" start use vundle """"""""""""""""""""""""""""""""""""""""""""""""""
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+
+" The following are examples of different formats supported.
+" Keep Plugin commands between vundle#begin/end.
+" plugin on GitHub repo
+Plugin 'tpope/vim-fugitive'
+" plugin from http://vim-scripts.org/vim/scripts.html
+" Plugin 'L9'
+" Git plugin not hosted on GitHub
+Plugin 'git://git.wincent.com/command-t.git'
+" git repos on your local machine (i.e. when working on your own plugin)
+"Plugin 'file:///home/gmarik/path/to/plugin'
+" The sparkup vim script is in a subdirectory of this repo called vim.
+" Pass the path to set the runtimepath properly.
+Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+" Install L9 and avoid a Naming conflict if you've already installed a
+" different version somewhere else.
+Plugin 'ascenator/L9', {'name': 'newL9'}
+
+Plugin 'chriskempson/base16-vim'
+Plugin 'Valloric/YouCompleteMe'
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+
+""""""""""""""""""""""""""""" end use vundle """"""""""""""""""""""""""""""""""""""""""""""""""
+
+"let g:rustfmt_autosave = 1
+Plugin 'rust-lang/rust.vim'
+
+
+"disable some commands for .vimrc not in ~
+set exrc
+set secure
+
+set nocp
+set expandtab
+"set ts=2
+"set shiftwidth=2
+set nu
+
+set softtabstop=8
+set shiftwidth=8
+
+autocmd FileType c,cpp set cc=100
+autocmd FileType python set softtabstop=4 shiftwidth=4
+autocmd FileType go set softtabstop=4 shiftwidth=4
+
+"highlight column limit
+set colorcolumn=100
+highlight ColorColumn ctermbg=darkgray
+
+let &path.="/usr/include,"
+
+set smartindent
+
+" show trailing whitespace
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd BufWinLeave * call clearmatches()
+
+" give me some syntax highlighting
+syntax on
+
+" set gvim window size
+if has("gui_running")
+  set lines=60 columns=110
+endif
+
+"vim-pathogen: manage runtimepath
+"execute pathogen#infect()
+
+" Used by vim-airline
+"Enable the list of buffers
+let g:airline#extensions#tabline#enabled = 1
+"Show just the filename
+let g:airline#extensions#tabline#fnamemod = ':t'
+
+""""""""""""""" Replace the tab shortcuts I'd no longer be using?"""""
+
+" This allows buffers to be hidden if you've modified a buffer.
+" This is almost a must if you wish to use buffers in this way.
+set hidden
+
+" To open a new empty buffer
+" This replaces :tabnew which I used to bind this mapping
+nmap <Tab>t :enew<CR>
+
+" Move to the next buffer
+nmap <Tab><Left>  :bprevious<CR>
+
+" Move to the previous buffer
+nmap <Tab><Right> :bnext<CR>
+
+" Close the current buffer and move to the previous one
+" This replaces the idea of closing a tab
+nmap <Tab>q :bp <BAR> bd #<CR>
+
+" Show all open buffers and their status
+nmap <Tab>l :ls<CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+map <F2> :echo 'Current time is ' . strftime('%c')<CR>
+
+vmap <C-c> "+yi
+vmap <C-x> "+c
+vmap <C-v> c<ESC>"+p
+imap <C-v> <C-r><C-o>+
+
+
+set cursorline
+:hi Cursorline cterm=underline
+
+"""""""""""""""""""""""""""""copy from costa
+" allow backspacing over everything in insert mode
+set backspace=indent,eol,start
+
+set history=50          " keep 50 lines of command line history
+set incsearch           " do incremental searching
+
+set smartcase           " ignore case if all lower case
+set autoindent
+set copyindent
+set nobackup
+" set noswapfile
+
+syntax on
+
+set encoding=utf-8
+
+:set is hls
+:set ic vb
+
+set hidden
+
+set expandtab
+set softtabstop=8
+set shiftwidth=8
+
+autocmd FileType c,cpp set cc=100
+autocmd FileType python set softtabstop=4 shiftwidth=4
+autocmd FileType go set softtabstop=4 shiftwidth=4
+
+set viminfo=
+
+let mapleader=","
+
+set tags=tags
+
+" Tab previews when opening files
+set wildmode=longest,list
+" Automatically open files based on current file
+"set autochdir
+
+highlight Folded guibg=bg guifg=fg
+set foldtext=getline(v:foldstart)
+
+set autoread
+set autowriteall
+
+" Only do this part when compiled with support for autocommands.
+if has("autocmd")
+  " Put these in an autocmd group, so that we can delete them easily.
+  augroup vimrcEx
+  au!
+
+  " For all text files set 'textwidth' to 78 characters.
+  autocmd FileType text setlocal textwidth=78
+
+  " When editing a file, always jump to the last known cursor position.
+  " Don't do it when the position is invalid or when inside an event handler
+  " (happens when dropping a file on gvim).
+  " Also don't do it when the mark is in the first line, that is the default
+  " position when opening a file.
+  autocmd BufReadPost *
+    \ if line("'\"") > 1 && line("'\"") <= line("$") |
+    \   exe "normal! g`\"" |
+    \ endif
+
+  augroup END
+
+  autocmd filetype html,xml set listchars-=tab:>.
+
+  au! BufRead,BufNewFile todo.txt,projects.txt set filetype=todotxt
+else
+
+  set autoindent                " always set autoindenting on
+
+endif " has("autocmd")
+
+
+function! InitBackupDir()
+  if has('win32') || has('win32unix') "windows/cygwin
+    let separator = "_"
+  else
+    let separator = "."
+  endif
+  let parent = $HOME .'/' . separator . 'vim/'
+  let backup = parent . 'backup/'
+  let tmp = parent . 'tmp/'
+  if exists("*mkdir")
+    if !isdirectory(parent)
+      call mkdir(parent)
+    endif
+    if !isdirectory(backup)
+      call mkdir(backup)
+    endif
+    if !isdirectory(tmp)
+      call mkdir(tmp)
+    endif
+  endif
+  let missing_dir = 0
+  if isdirectory(tmp)
+    execute 'set backupdir=' . escape(backup, " ") . "/,."
+  else
+    let missing_dir = 1
+  endif
+  if isdirectory(backup)
+    execute 'set directory=' . escape(tmp, " ") . "/,."
+  else
+    let missing_dir = 1
+  endif
+  if missing_dir
+    echo "Warning: Unable to create backup directories: " . backup ." and " . tmp
+    echo "Try: mkdir -p " . backup
+    echo "and: mkdir -p " . tmp
+    set backupdir=.
+    set directory=.
+  endif
+endfunction
+call InitBackupDir()
+
+"colorscheme base16-default-dark
+colorscheme torte
+
+" YouCompleteMe
+let g:ycm_confirm_extra_conf = 0
+" Code navigation with Ctrl-] , use Ctrl-O to get back to previous location
+nnoremap <silent> <C-]> :YcmCompleter GoTo<CR>

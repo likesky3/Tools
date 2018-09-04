@@ -1,0 +1,14 @@
+1. Vundle line in .vimrc
+Plugin 'Valloric/YouCompleteMe'
+
+2. Follow the installation instructions for your os
+http://valloric.github.io/YouCompleteMe/#ubuntu-linux-x64-super-quick-installation
+
+to get real-time error messages and C++ smart autocomplete. Note: If you get messages about "Your C++ compiler does NOT fully support C++11" it might be because it cannot find your Clang installation location. If that's the case, you can specify it using the CXX variable. For example:
+CXX=/usr/bin/clang++-3.9 ./install.py --clang-completer
+
+3. config .vimrc
+" YouCompleteMe
+let g:ycm_confirm_extra_conf = 0
+" Code navigation with Ctrl-] , use Ctrl-O to get back to previous location
+nnoremap <silent> <C-]> :YcmCompleter GoTo<CR>
